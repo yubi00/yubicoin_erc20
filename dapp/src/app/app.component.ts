@@ -3,7 +3,7 @@ import {canBeNumber} from '../util/validation';
 
 const Web3 = require('web3');
 const contract = require('truffle-contract');
-const metaincoinArtifacts = require('../../build/contracts/MetaCoin.json');
+const yubicoinArtifacts = require('../../build/contracts/YubiCoin.json');
 
 @Component({
   selector: 'app-root',
@@ -11,13 +11,14 @@ const metaincoinArtifacts = require('../../build/contracts/MetaCoin.json');
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  MetaCoin = contract(metaincoinArtifacts);
+  YubiCoin = contract(yubicoinArtifacts);
 
   account: any;
   accounts: any;
   web3: any;
 
   balance: number;
+  totalsupply: number; 
   sendingAmount: number;
   recipientAddress: string;
   status: string;
@@ -29,10 +30,10 @@ export class AppComponent {
   }
 
   checkAndInstantiateWeb3() {
-    // Checking if Web3 has been injected by the browser (Mist/MetaMask)
+    // Checking if Web3 has been injected by the browser (Mist/aaMask)
     if (typeof this.web3 !== 'undefined') {
       console.warn('Using web3 detected from external source. If you find that your accounts don\'t appear or you have ' +
-        '0 MetaCoin, ensure you\'ve configured that source properly. If using MetaMask, see the following link. Feel ' +
+        '0 YubiCoin, ensure you\'ve configured that source properly. If using MetaMask, see the following link. Feel ' +
         'free to delete this warning. :) http://truffleframework.com/tutorials/truffle-and-metamask');
       // Use Mist/MetaMask's provider
       this.web3 = new Web3(this.web3.currentProvider);
@@ -46,8 +47,8 @@ export class AppComponent {
   }
 
   onReady() {
-    // Bootstrap the MetaCoin abstraction for Use.
-    this.MetaCoin.setProvider(this.web3.currentProvider);
+    // Bootstrap the YubiCoin abstraction for Use.
+    this.YubiCoin.setProvider(this.web3.currentProvider);
 
     // Get the initial account balance so it can be displayed.
     this.web3.eth.getAccounts((err, accs) => {
@@ -63,16 +64,32 @@ export class AppComponent {
       this.accounts = accs;
       this.account = this.accounts[0];
 
-      this.refreshBalance();
+      this.initialSupply();
     });
   }
 
-  refreshBalance() {
-    let meta;
-    this.MetaCoin.deployed()
+  initialSupply() {
+    let yubi;
+    this.YubiCoin.deployed()
       .then((instance) => {
-        meta = instance;
-        return meta.getBalance.call(this.account, {
+        yubi = instance;
+        return yubi.totalSupply.call();
+      })
+      .then((value) => {
+        this.totalsupply = value.toString(10);
+      })
+      .catch((e) => {
+        console.log(e);
+        this.setStatus('Error getting balance; see log.');
+      });
+  }
+
+  refreshBalance() {
+    let yubi;
+    this.YubiCoin.deployed()
+      .then((instance) => {
+        yubi = instance;
+        return yubi.balanceOf.call(this.account, {
           from: this.account
         });
       })
@@ -85,6 +102,8 @@ export class AppComponent {
       });
   }
 
+
+
   setStatus(message: string) {
     this.status = message;
   }
@@ -92,16 +111,22 @@ export class AppComponent {
   sendCoin() {
     const amount = this.sendingAmount;
     const receiver = this.recipientAddress;
-    let meta;
+    let yubi;
 
     this.setStatus('Initiating transaction... (please wait)');
 
-    this.MetaCoin.deployed()
+    this.YubiCoin.deployed()
       .then((instance) => {
-        meta = instance;
-        return meta.sendCoin(receiver, amount, {
-          from: this.account
-        });
+        yubi = instance;
+       var contractabi = yubi.abi;
+       console.log("abi: "+contractabi);
+       var contractaddress = yubi.address; 
+       console.log("contract address: "+yubi.address);
+       var coinbase = '0x45aB33Ae8Ce087dee888191963785c09A5468f83';
+       console.log("coinbase acoount :"+coinbase);
+
+       
+
       })
       .then(() => {
         this.setStatus('Transaction complete!');
