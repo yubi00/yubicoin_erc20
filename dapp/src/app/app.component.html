@@ -4,17 +4,29 @@
       <h1 class="title">
        <strong> Yubicoin </strong>
       </h1>
+      <h2 class="title">
+        Account:  <span class="is-medium has-underline">{{account}}</span> 
+      </h2>
       <h2 class = "title">Total Supply: <span class="is-medium has-underline">{{totalsupply}}</span> YBC </h2>
 
       <h2 class="title">
-        You have <span class="is-medium has-underline">{{balance}}</span> YBC
+        YBC: <span class="is-medium has-underline">{{balance}}</span> YBC
+      </h2>
+      <h2 class="title">
+        ETH: <span class="is-medium has-underline">{{etherbalance}}</span> ether
       </h2>
     </div>
   </div>
 </section>
 <br>
 <div class="container">
-  <h1 class="title">Send Yubicoin</h1>
+  <h1 class="title">Send </h1>
+
+  <select id="send_choices">
+    <option value="ybc">YBC</option>
+    <option value="ether">ETH</option>
+    
+  </select>
   <h1 class="title is-4 is-info help">{{status}}</h1>
 
   <form #coinForm="ngForm">
