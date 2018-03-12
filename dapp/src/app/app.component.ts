@@ -14,9 +14,20 @@ const yubicoinArtifacts = require('../../build/contracts/YubiCoin.json');
 export class AppComponent {
   YubiCoin = contract(yubicoinArtifacts);
 
+  
   account: any;
   accounts: any;
   web3: any;
+  selectedchoices: any;
+  allchoices: any = [
+      {choice: 'YBC'},
+      {choice: 'ETH'}
+  ]
+  
+  selectChangeHandler (event: any) {
+    this.selectedchoices = event.target.value; 
+    alert(this.selectedchoices);
+  }
 
   balance: number;
   totalsupply: number; 
@@ -69,14 +80,14 @@ export class AppComponent {
       this.accounts = accs;
       this.account = this.accounts[0];
 
-      this.initialSupply();
+      this.totalTokens();
       this.refreshBalance();
       this.etherbalance = this.web3.fromWei(this.web3.eth.getBalance(this.account));
       
     });
   }
 
-  initialSupply() {
+  totalTokens() {
     let yubi;
     this.YubiCoin.deployed()
       .then((instance) => {
@@ -115,24 +126,21 @@ export class AppComponent {
     this.status = message;
   }
 
-  waitForTransactionReceipt(hash: string)
-  {
-    console.log('waiting for contract to be mined');
-    const receipt = this.web3.eth.getTransactionReceipt(hash);
-    // If no receipt, try again in 1s
-    if (receipt == null) {
-        setTimeout(() => {
-            this.waitForTransactionReceipt(hash);
-        }, 1000);
-    } else {
-        // The transaction was mined, we can retrieve the contract address
-        console.log(receipt);
-        
-        console.log('Transaction hash: '+receipt.transactionHash);
-        console.log('contract address: ' + receipt.contractAddress);
-       
-    }
+
+
+  sendEther(){
+    const amount = this.sendingAmount;
+    const receiver = this.recipientAddress;
+
+    this. web3.eth.sendTransaction({
+      from: this.account,
+      to: receiver,
+      value: this.web3.toWei(amount, "ether")
+    })
+    this.setStatus("Transaction Complete");
+    this.refreshBalance();
   }
+  
 
   sendCoin() {
     const amount = this.sendingAmount;
@@ -154,8 +162,9 @@ export class AppComponent {
        console.log("nonce : "+ noncevalue);
 
        var mydata = this.web3.sha3('transfer(address,uint)');
+       console.log("mydata: "+mydata)
        var mydatahex = mydata.substr(0,10);
-       console.log("My data: "+mydata); 
+       console.log("My data: "+mydata);
        var mydata_2 = ethcontract.transfer.getData(receiver, amount, {from: this.account});
        console.log("mYdata2: "+mydata_2);
 
@@ -173,7 +182,7 @@ export class AppComponent {
 
 
         
-        var privateKeybuff = new Buffer('6cf3addcb9f44801dfd55813cd278b6470f99137a4a8d43b04dd09f9bbf3c2df', 'hex');
+        var privateKeybuff = new Buffer('45586a0f4dec506d68f5e0d445f6ac8c629bcaaec61a2934e86f2c10645fc255', 'hex');
 
         
         var tx = new Tx(rawTx);
@@ -191,10 +200,7 @@ export class AppComponent {
         this.web3.eth.sendRawTransaction(rawtxn, function(err, hash) {
           if (!err){
         // Log the tx, you can explore status manually with eth.getTransaction()
-            console.log('contract creation tx: ' + hash);
-        
-            // Wait for the transaction to be mined
-            this.waitForTransactionReceipt(hash);
+            console.log('contract creation tx: ' + hash);            
           }
           else    
           {
@@ -207,6 +213,7 @@ export class AppComponent {
       .then(() => {
         this.setStatus('Transaction complete!');
         this.refreshBalance();
+        this.totalTokens();
       })
       .catch((e) => {
         console.log(e);

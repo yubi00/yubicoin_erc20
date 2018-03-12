@@ -22,10 +22,9 @@
 <div class="container">
   <h1 class="title">Send </h1>
 
-  <select id="send_choices">
-    <option value="ybc">YBC</option>
-    <option value="ether">ETH</option>
-    
+  <select (change) = "selectChangeHandler($event)" [(ngModel)]="selectedchoices">
+      <option value="">Select a choice</option>
+    <option *ngFor = "let choices of allchoices" >{{choices.choice}}</option>
   </select>
   <h1 class="title is-4 is-info help">{{status}}</h1>
 
@@ -86,7 +85,7 @@
       <p class="control">
         <button
           [disabled]="!coinForm.valid"
-          (click)="sendCoin()"
+          (click)="sendEther()"
           class="button is-primary">
           Send
         </button>
