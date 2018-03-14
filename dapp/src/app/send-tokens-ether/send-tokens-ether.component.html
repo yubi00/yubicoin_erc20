@@ -1,0 +1,99 @@
+<section class="hero is-medium is-info is-bold">
+  <div class="hero-body">
+    <div class="container">
+      <h1 class="title">
+       <strong> Contract address: {{contractaddress}} </strong>
+      </h1>
+      <h2 class="title">
+        Account:  <span class="is-medium has-underline">{{account}}</span> 
+      </h2>
+      <h2 class = "title">Total Supply: <span class="is-medium has-underline">{{totalsupply}}</span> YBC </h2>
+
+      <h2 class="title">
+        YBC: <span class="is-medium has-underline">{{balance}}</span> YBC
+      </h2>
+      <h2 class="title">
+        ETH: <span class="is-medium has-underline">{{etherbalance}}</span> ether
+      </h2>
+    </div>
+  </div>
+</section>
+<br>
+<div class="container">
+  <h1 class="title">Send </h1>
+
+  <select (change)="selectChangeHandler($event)" [(ngModel)]="selectedchoices" #selectedchoicesmodel="ngModel">
+      <option [ngValue]="undefined"  selected >Select a choice</option>
+    <option *ngFor = "let choices of allchoices"  >{{choices.choice}}</option>
+  </select>
+  <h1 class="title is-4 is-info help">{{status}}</h1>
+
+  <form #coinForm="ngForm">
+    <div class="field">
+      <label class="label">Amount</label>
+      <p class="control">
+        <input
+          [(ngModel)]="sendingAmount"
+          class="input"
+          type="text"
+          placeholder="95"
+          name="sendingAmount"
+          required
+          #sendingAmountModel="ngModel">
+      </p>
+      <div *ngIf="sendingAmountModel.errors && (sendingAmountModel.dirty || sendingAmountModel.touched)"
+           class="help is-danger">
+        <p [hidden]="!sendingAmountModel.errors.required">
+          This field is required
+        </p>
+      </div>
+      <div *ngIf="!sendingAmountModel.errors && (sendingAmountModel.dirty || sendingAmountModel.touched)"
+           class="help is-danger">
+        <p [hidden]="canBeNumber(sendingAmount)">
+          Must be a number
+        </p>
+      </div>
+    </div>
+    <div class="field">
+      <label class="label">To Address</label>
+      <p class="control">
+        <input
+          [(ngModel)]="recipientAddress"
+          name="recipientAddress"
+          class="input"
+          type="text"
+          placeholder="0x93e66d9baea28c17d9fc393b53e3fbdd76899dae"
+          required
+          #recipientAddressModel="ngModel"
+        >
+      </p>
+      <div *ngIf="recipientAddressModel.errors && (recipientAddressModel.dirty || recipientAddressModel.touched)"
+           class="help is-danger">
+        <p [hidden]="!recipientAddressModel.errors.required">
+          This field is required
+        </p>
+      </div>
+      <div *ngIf="!recipientAddressModel.errors && (recipientAddressModel.dirty || recipientAddressModel.touched)"
+           class="help is-danger">
+        <p [hidden]="canBeNumber(recipientAddress)">
+          Must be a number
+        </p>
+      </div>
+    </div>
+
+    <div class="field is-grouped">
+      <p class="control">
+        <button 
+          [disabled]="!coinForm.valid" 
+          (click)="sendYBCEther()"
+          class="button is-primary">
+          Send
+        </button>
+      </p>
+    </div>
+  
+  </form>
+
+  
+
+</div>

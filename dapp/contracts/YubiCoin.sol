@@ -117,8 +117,8 @@ contract YubiCoin is ERC20Interface, Owned, SafeMath {
         name = "yubicoin";
         decimals = 18;
         _totalSupply = 100000000000000000000000000;
-        balances[0x45aB33Ae8Ce087dee888191963785c09A5468f83] = _totalSupply;
-        Transfer(address(0), 0x45aB33Ae8Ce087dee888191963785c09A5468f83, _totalSupply);
+        balances[msg.sender] = _totalSupply;
+        Transfer(address(0), msg.sender, _totalSupply);
     }
 
 
