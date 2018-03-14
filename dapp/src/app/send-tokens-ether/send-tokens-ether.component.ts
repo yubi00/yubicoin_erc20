@@ -27,7 +27,7 @@ export class SendTokensEtherComponent {
   selectChangeHandler (event: any) {
     this.selectedchoices = event.target.value; 
     this.selectedchoice = String(this.selectedchoices);
-    alert(this.selectedchoice);
+  
     
   }
 
@@ -213,9 +213,9 @@ export class SendTokensEtherComponent {
 
         console.log(rawTx);
 
-
+         //hard coded private key of the coin base account  for testing purpose
         
-        var privateKeybuff = new Buffer('77c27c56840d19cfe37da3bb4c1b2ef3c3c1ce239175786b13122ac6958d0b95', 'hex');        
+        var privateKeybuff =new Buffer('77c27c56840d19cfe37da3bb4c1b2ef3c3c1ce239175786b13122ac6958d0b95', 'hex');        
         var tx = new Tx(rawTx);
         console.log("tx: "+tx);
         tx.sign(privateKeybuff);

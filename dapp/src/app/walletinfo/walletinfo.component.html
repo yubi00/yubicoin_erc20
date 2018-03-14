@@ -1,3 +1,11 @@
-<p>
-  walletinfo works!
-</p>
+<div style="display:inline-block; width: 500px;">
+    <h1 class="title">
+        Upload your wallet keystore file 
+      </h1>
+      <input type="file" #keystorefile (change)="fileChange($event)" placeholder="Upload keystore file" >
+      <div>
+        <button type="submit" (click)="getPrivateKey()" >Submit</button>
+      </div>
+</div>
+
+
