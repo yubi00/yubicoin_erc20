@@ -4,7 +4,7 @@
       </h1>
 
       <form  #walletinfoform="ngForm">
-          <input type="text" class="input" placeholder="enter private key" [(ngModel)]="privatekey" #privatekeymodel="ngModel" >
+          <input type="text" class="input" placeholder="enter private key" > <br><br>
           <div>
             <button [disabled]="!walletinfoform.valid" type="submit" class="button is-primary" (click)="generateAddress()" >Submit</button>
           </div>
