@@ -93,7 +93,7 @@ export class SendTokensEtherComponent {
         return;
       }
       this.accounts = accs;
-      this.account = this.accounts[0];
+      this.account = this.accounts[1];
       this.getContractAddress();
       this.totalTokens();
       this.refreshBalance();
@@ -128,7 +128,7 @@ export class SendTokensEtherComponent {
         return yubi.totalSupply.call();
       })
       .then((value) => {
-        this.totalsupply = this.web3.fromWei(value, 'ether').toNumber();
+        this.totalsupply = value.toString(10);
       })
       .catch((e) => {
         console.log(e);
@@ -141,8 +141,8 @@ export class SendTokensEtherComponent {
     this.YubiCoin.deployed()
       .then((instance) => {
         yubi = instance;
-        return yubi.balanceOf.call(this.web3.eth.accounts[0], {
-          from: this.web3.eth.accounts[0]
+        return yubi.balanceOf.call(this.account, {
+          from: this.account
         });
       })
       .then((value) => {
@@ -159,18 +159,7 @@ export class SendTokensEtherComponent {
     this.status = message;
   }
 
-  hexToBytes(hex: any){
-    for (var bytes = [], c = 0; c < hex.length; c+=2)
-	  bytes.push(parseInt((hex.toString()).substr(c, 2), 16));
-	  return bytes;
-  }
-
-  privateKeyToAddress(privateKey: any){
-    
-	    return `0x${EthUtil.privateToAddress(this.hexToBytes(privateKey)).toString('hex')}`;
-
-  }
-
+  
   sendEther(){
     const amount = this.sendingAmount;
     const receiver = this.recipientAddress;
@@ -226,8 +215,9 @@ export class SendTokensEtherComponent {
         console.log(rawTx);
 
          //hard coded private key of the coin base account  for testing purpose
+       
+        var privateKeybuff =new Buffer('d852add137400c59c03c0f64f07ea9a115778003c3552885247716fa4aa90ae0', 'hex');       
         
-        var privateKeybuff =new Buffer('89625dbfd44c35acd571ab7b7b49a8b924d5cd56da4c7b4d7b09e62c411e0f33', 'hex');        
         var tx = new Tx(rawTx);
         console.log("tx: "+tx);
         tx.sign(privateKeybuff);

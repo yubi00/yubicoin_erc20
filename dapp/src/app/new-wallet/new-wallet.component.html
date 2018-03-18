@@ -1,20 +1,28 @@
-<div>
-  <h1 class="title">Create New Wallet</h1>
-  <h2>Enter Passcode</h2>
-
-  <form>
-    <p class="control">
-      <input type="text" class="input" #passcode placeholder="enter passcode" /> <br/><br/>
-    </p>
-    
-    <button (click)="newWallet()" class="button is-primary">Generate New Wallet</button>
+    <div>
+      <h1 class="title">Create New Wallet</h1>
+      
+      <form #walletform="ngForm">
+        <p class="control">
+            <label class="label">Passcode</label>
+          <input type="password" class="input"  placeholder="enter passcode" name="passcode" required [(ngModel)] = "passcode" #passcodemodel = "ngModel"  /> <br/><br/>
+        </p>
+        
+    <div class="field is-grouped">
+        <p class="control">
+          <button 
+            [disabled]="!walletform.valid" 
+            (click)="newWallet()"
+            class="button is-primary">
+            Create New Wallet
+          </button>
+        </p>
+      </div>
 
   </form>
-  
 
-  <div>
-    <h2 class="title">Keep your private key safe</h2>
-    <div><strong>Private Key: {{privatekey}} </strong></div>
+  <div [hidden]="!privatekey" style="margin:20px; ">
+    <h2 class="title"><strong>Keep your private key safe</strong></h2>
+    <div><h2 class="title">Private Key: {{privatekey}} </h2></div>
   </div>
  
 </div>

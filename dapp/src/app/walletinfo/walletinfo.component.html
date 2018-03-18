@@ -1,11 +1,15 @@
 <div style="display:inline-block; width: 500px;">
     <h1 class="title">
-        Upload your wallet keystore file 
+        Enter your Private Key
       </h1>
-      <input type="file" #keystorefile (change)="fileChange($event)" placeholder="Upload keystore file" >
-      <div>
-        <button type="submit" (click)="getPrivateKey()" >Submit</button>
-      </div>
+
+      <form  #walletinfoform="ngForm">
+          <input type="text" class="input" placeholder="enter private key" [(ngModel)]="privatekey" #privatekeymodel="ngModel" >
+          <div>
+            <button [disabled]="!walletinfoform.valid" type="submit" class="button is-primary" (click)="generateAddress()" >Submit</button>
+          </div>
+      </form>
+      
 </div>
 
 

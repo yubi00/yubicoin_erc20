@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 var keythereum = require("keythereum");
+var EthUtil = require('ethereumjs-util');
+const Web3 = require('web3');
 
 @Component({
   selector: 'app-walletinfo',
@@ -9,33 +11,36 @@ var keythereum = require("keythereum");
 export class WalletinfoComponent implements OnInit {
 
   privatekey: any;
-  account: any;
-  accounts: any;
   web3: any;
   contractaddress: any;
   totalsupply: number;
-  totaltokens: number;
+  tokenbalance: number;
   etherbalance: number; 
-  selectedfiles: any;
-  keystorefile : File;
+  ethereumaddress: any;
 
   constructor() { }
 
   ngOnInit() {
   }
  
-  fileChange(event: any) {
-    let files: FileList = event.target.files;
-        this.keystorefile = files[0];
-        console.log(this.keystorefile);
+  generateAddress() {
+    this.ethereumaddress = this.privateKeyToAddress(this.privatekey);
+    console.log("Generated ethereum address: "+this.ethereumaddress);
+  }  
 
+  hexToBytes(hex: any){
+    for (var bytes = [], c = 0; c < hex.length; c+=2)
+	  bytes.push(parseInt((hex.toString()).substr(c, 2), 16));
+	  return bytes;
   }
 
-  getPrivateKey(filelocation: any,  contract_address: any, password: any) {
-    var keyobject = keythereum.importFromFile(contract_address, filelocation);
-    console.log(keyobject);
+  privateKeyToAddress(privateKey: any){
+    
+	    return `0x${EthUtil.privateToAddress(this.hexToBytes(privateKey)).toString('hex')}`;
 
-    this.privatekey = keythereum.recover(password, keyobject);
-    console.log((this.privatekey).toString('hex'));
   }
+  
+
+
+  
 }
