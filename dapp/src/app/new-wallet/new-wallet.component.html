@@ -1,0 +1,20 @@
+<div>
+  <h1 class="title">Create New Wallet</h1>
+  <h2>Enter Passcode</h2>
+
+  <form>
+    <p class="control">
+      <input type="text" class="input" #passcode placeholder="enter passcode" /> <br/><br/>
+    </p>
+    
+    <button (click)="newWallet()" class="button is-primary">Generate New Wallet</button>
+
+  </form>
+  
+
+  <div>
+    <h2 class="title">Keep your private key safe</h2>
+    <div><strong>Private Key: {{privatekey}} </strong></div>
+  </div>
+ 
+</div>

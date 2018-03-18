@@ -7,6 +7,7 @@ import {Component, Input} from '@angular/core';
   template: `
   <h1 class="title">YubiCoin</h1>
   <nav>
+  <a routerLink="/new-wallet" routerLinkActive="active">New Wallet</a>
     <a routerLink="/viewwalletinfo" routerLinkActive="active">View Wallet Info</a>
     <a routerLink="/send-tokens-ether" routerLinkActive="active">Send Tokens/Ether</a>
   </nav>

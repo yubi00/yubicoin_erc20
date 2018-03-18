@@ -8,12 +8,14 @@ import { AppRoutingModule } from './app-routing.module';
 import { WalletInfoModule } from  './walletinfo/walletinfo.module'
 import { SendTokensEtherComponent } from './send-tokens-ether/send-tokens-ether.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { NewWalletComponent } from './new-wallet/new-wallet.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     SendTokensEtherComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    NewWalletComponent
   ],
   imports: [
     BrowserModule,

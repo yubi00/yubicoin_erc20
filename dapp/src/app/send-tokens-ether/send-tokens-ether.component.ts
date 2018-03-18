@@ -4,6 +4,7 @@ import {canBeNumber} from '../../util/validation';
 const Web3 = require('web3');
 const contract = require('truffle-contract');
 const Tx = require('ethereumjs-tx');
+const EthUtil = require('ethereumjs-util');
 
 const yubicoinArtifacts = require('../../../build/contracts/YubiCoin.json');
 @Component({
@@ -140,12 +141,12 @@ export class SendTokensEtherComponent {
     this.YubiCoin.deployed()
       .then((instance) => {
         yubi = instance;
-        return yubi.balanceOf.call(this.account, {
-          from: this.account
+        return yubi.balanceOf.call(this.web3.eth.accounts[0], {
+          from: this.web3.eth.accounts[0]
         });
       })
       .then((value) => {
-        this.balance = this.web3.fromWei(value, 'ether').toNumber();
+        this.balance =value.toString(10);
         console.log("token balance: "+this.balance);
       })
       .catch((e) => {
@@ -158,7 +159,17 @@ export class SendTokensEtherComponent {
     this.status = message;
   }
 
+  hexToBytes(hex: any){
+    for (var bytes = [], c = 0; c < hex.length; c+=2)
+	  bytes.push(parseInt((hex.toString()).substr(c, 2), 16));
+	  return bytes;
+  }
 
+  privateKeyToAddress(privateKey: any){
+    
+	    return `0x${EthUtil.privateToAddress(this.hexToBytes(privateKey)).toString('hex')}`;
+
+  }
 
   sendEther(){
     const amount = this.sendingAmount;
@@ -200,13 +211,14 @@ export class SendTokensEtherComponent {
        console.log("My data: "+mydata);
        var mydata_2 = ethcontract.transfer.getData(receiver, amount, {from: this.account});
        console.log("mYdata2: "+mydata_2);
+      
 
        var rawTx = {
         "from": this.account,
         "nonce": this.web3.toHex(noncevalue),
         "gasPrice": this.web3.toHex(this.web3.eth.gasPrice),
         "gasLimit":this.web3.toHex(300000),
-        "to": receiver,
+        "to": contractaddress,
         "value": 0,
         "data": mydata_2
          };
@@ -215,7 +227,7 @@ export class SendTokensEtherComponent {
 
          //hard coded private key of the coin base account  for testing purpose
         
-        var privateKeybuff =new Buffer('77c27c56840d19cfe37da3bb4c1b2ef3c3c1ce239175786b13122ac6958d0b95', 'hex');        
+        var privateKeybuff =new Buffer('89625dbfd44c35acd571ab7b7b49a8b924d5cd56da4c7b4d7b09e62c411e0f33', 'hex');        
         var tx = new Tx(rawTx);
         console.log("tx: "+tx);
         tx.sign(privateKeybuff);
