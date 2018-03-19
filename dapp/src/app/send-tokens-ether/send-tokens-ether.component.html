@@ -2,18 +2,18 @@
   <div class="hero-body">
     <div class="container">
       <h1 class="title">
-       <strong> Contract address: {{contractaddress}} </strong>
+       <strong> Contract address: {{dappservice.contractaddress}} </strong>
       </h1>
       <h2 class="title">
-        Account:  <span class="is-medium has-underline">{{account}}</span> 
+        Account:  <span class="is-medium has-underline">{{dappservice.account}}</span> 
       </h2>
-      <h2 class = "title">Total Supply: <span class="is-medium has-underline">{{totalsupply}}</span> YBC </h2>
+      <h2 class = "title">Total Supply: <span class="is-medium has-underline">{{dappservice.totalsupply}}</span> YBC </h2>
 
       <h2 class="title">
-        YBC: <span class="is-medium has-underline">{{balance}}</span> YBC
+        YBC: <span class="is-medium has-underline">{{dappservice.balance}}</span> YBC
       </h2>
       <h2 class="title">
-        ETH: <span class="is-medium has-underline">{{etherbalance}}</span> ether
+        ETH: <span class="is-medium has-underline">{{dappservice.etherbalance}}</span> ether
       </h2>
     </div>
   </div>
@@ -26,7 +26,7 @@
       <option [ngValue]="undefined"  selected >Select a choice</option>
     <option *ngFor = "let choices of allchoices"  >{{choices.choice}}</option>
   </select>
-  <h1 class="title is-4 is-info help">{{status}}</h1>
+  <h1 class="title is-4 is-info help">{{dappservice.status}}</h1>
 
   <form #coinForm="ngForm">
     <div class="field">
